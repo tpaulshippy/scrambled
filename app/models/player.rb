@@ -51,7 +51,7 @@ class Player < ApplicationRecord
     if Rails.env.test?
       game.start_countdown!
     else
-      CountdownJob.perform_in(1.second, game.id)
+      CountdownJob.set(wait: 1.second).perform_later(game.id)
     end
   end
 end

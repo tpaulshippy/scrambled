@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["scrambledWord", "answerArea", "letterTile"]
+  static targets = ["scrambledWord", "answerArea", "letterTile", "answerTiles"]
   static values = { gameId: String, playerId: String }
   
   connect() {
@@ -60,20 +60,20 @@ export default class extends Controller {
     }
   }
   
-  selectLetter(letterElement) {
-    this.addToAnswer(letterElement)
+  selectLetter(event) {
+    this.addToAnswer(event.currentTarget)
   }
   
   addToAnswer(letterElement) {
     const letter = letterElement.dataset.letter
-    const answerArea = document.getElementById('answer-tiles')
+    const answerArea = this.answerTilesTarget
     
     // Create a new tile for the answer area
     const answerTile = document.createElement('div')
     answerTile.className = 'letter-tile bg-green-100 border-2 border-green-300 w-12 h-12 flex items-center justify-center text-xl font-bold text-green-900 rounded cursor-pointer hover:bg-green-200 transition'
     answerTile.textContent = letter.toUpperCase()
     answerTile.dataset.letter = letter
-    answerTile.onclick = () => this.removeFromAnswer(answerTile)
+    answerTile.dataset.action = 'click->scramble#removeFromAnswer'
     
     answerArea.appendChild(answerTile)
     
@@ -82,11 +82,12 @@ export default class extends Controller {
     letterElement.dataset.used = 'true'
   }
   
-  removeFromAnswer(answerTile) {
+  removeFromAnswer(event) {
+    const answerTile = event.currentTarget
     const letter = answerTile.dataset.letter
     
     // Find the original tile and show it again
-    const originalTiles = document.querySelectorAll('.letter-tile[data-letter="' + letter + '"][data-used="true"]')
+    const originalTiles = this.element.querySelectorAll('.letter-tile[data-letter="' + letter + '"][data-used="true"]')
     for (let tile of originalTiles) {
       if (tile.style.visibility === 'hidden') {
         tile.style.visibility = 'visible'
@@ -100,16 +101,18 @@ export default class extends Controller {
   }
   
   clearAnswer() {
-    const answerArea = document.getElementById('answer-tiles')
+    const answerArea = this.answerTilesTarget
     const answerTiles = answerArea.querySelectorAll('.letter-tile')
     
     answerTiles.forEach(tile => {
-      this.removeFromAnswer(tile)
+      // Create a fake event object for the removeFromAnswer method
+      const fakeEvent = { currentTarget: tile }
+      this.removeFromAnswer(fakeEvent)
     })
   }
   
   submitAnswer() {
-    const answerArea = document.getElementById('answer-tiles')
+    const answerArea = this.answerTilesTarget
     const answerTiles = answerArea.querySelectorAll('.letter-tile')
     const answer = Array.from(answerTiles).map(tile => tile.dataset.letter).join('')
     
@@ -169,101 +172,4 @@ export default class extends Controller {
     })
   }
   
-  getGameId() {
-    // Extract game ID from URL or page data
-    const path = window.location.pathname
-    const match = path.match(/\/games\/(\d+)/)
-    return match ? match[1] : null
-  }
-  
-  getPlayerId() {
-    // This would need to be set somewhere in the page, for now return null
-    // We'll handle this in the controller
-    return null
-  }
-}
-
-// Make functions globally available for onclick handlers
-window.selectLetter = function(element) {
-  const controller = document.querySelector('[data-controller="scramble"]')
-  if (controller && controller.scrambleController) {
-    controller.scrambleController.selectLetter(element)
-  } else {
-    // Fallback for direct function calls
-    const scrambleController = new (require("controllers/scramble_controller").default)()
-    scrambleController.element = document.querySelector('[data-controller="scramble"]') || document.body
-    scrambleController.selectLetter(element)
-  }
-}
-
-window.clearAnswer = function() {
-  const controller = document.querySelector('[data-controller="scramble"]')
-  if (controller && controller.scrambleController) {
-    controller.scrambleController.clearAnswer()
-  } else {
-    const answerArea = document.getElementById('answer-tiles')
-    const answerTiles = answerArea.querySelectorAll('.letter-tile')
-    
-    answerTiles.forEach(tile => {
-      const letter = tile.dataset.letter
-      const originalTiles = document.querySelectorAll('.letter-tile[data-letter="' + letter + '"][data-used="true"]')
-      for (let originalTile of originalTiles) {
-        if (originalTile.style.visibility === 'hidden') {
-          originalTile.style.visibility = 'visible'
-          originalTile.dataset.used = 'false'
-          break
-        }
-      }
-      tile.remove()
-    })
-  }
-}
-
-window.submitAnswer = function() {
-  const controller = document.querySelector('[data-controller="scramble"]')
-  if (controller && controller.scrambleController) {
-    controller.scrambleController.submitAnswer()
-  } else {
-    const answerArea = document.getElementById('answer-tiles')
-    const answerTiles = answerArea.querySelectorAll('.letter-tile')
-    const answer = Array.from(answerTiles).map(tile => tile.dataset.letter).join('')
-    
-    if (answer.length === 0) {
-      alert('Please form a word before submitting!')
-      return
-    }
-    
-    // Simple submission without controller
-    const path = window.location.pathname
-    const match = path.match(/\/games\/(\d+)/)
-    const gameId = match ? match[1] : null
-    
-    if (!gameId) {
-      alert('Unable to submit answer. Please refresh the page.')
-      return
-    }
-    
-    // We'll need to get player ID from session or page data
-    // For now, just show what the answer would be
-    alert(`You answered: ${answer}`)
-  }
-}
-
-window.markReady = function() {
-  const controller = document.querySelector('[data-controller="scramble"]')
-  if (controller && controller.scrambleController) {
-    controller.scrambleController.markReady()
-  } else {
-    // Simple ready marking without controller
-    const path = window.location.pathname
-    const match = path.match(/\/games\/(\d+)/)
-    const gameId = match ? match[1] : null
-    
-    if (!gameId) {
-      alert('Unable to mark ready. Please refresh the page.')
-      return
-    }
-    
-    alert('Marking ready...')
-  }
 }
