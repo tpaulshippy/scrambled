@@ -1,0 +1,66 @@
+<div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
+  <% if game.waiting? %>
+    <div class="text-2xl font-bold text-gray-900 mb-4">Waiting for Players</div>
+    <p class="text-gray-600 mb-4">Need at least 2 players to start</p>
+    
+    <% current_player = Player.find_by(id: session[:player_id]) if session[:player_id] %>
+    <% if current_player&.game == game && !current_player.ready? %>
+      <button id="ready-btn" onclick="markReady()" 
+              class="bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
+        Ready to Play!
+      </button>
+    <% elsif current_player&.ready? %>
+      <div class="text-green-600 font-semibold text-lg">✓ You're ready!</div>
+    <% end %>
+    
+  <% elsif game.countdown? %>
+    <div id="countdown" class="text-6xl font-bold text-red-500 mb-4">3</div>
+    <p class="text-gray-600">Get ready...</p>
+    
+  <% elsif game.playing? %>
+    <div class="mb-6">
+      <div class="text-sm text-gray-500 mb-2">Round <%= game.round_number %></div>
+      <div class="text-lg text-gray-700 mb-4">Unscramble this word:</div>
+      
+      <div id="scrambled-word" class="mb-6">
+        <div class="flex justify-center space-x-2 mb-4">
+          <% game.scrambled_word.chars.each_with_index do |letter, index| %>
+            <div class="letter-tile bg-blue-100 border-2 border-blue-300 w-12 h-12 flex items-center justify-center text-xl font-bold text-blue-900 rounded cursor-pointer hover:bg-blue-200 transition"
+                 data-letter="<%= letter %>" data-position="<%= index %>" onclick="selectLetter(this)">
+              <%= letter.upcase %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <div id="answer-area" class="mb-6">
+        <div class="text-sm text-gray-500 mb-2">Your answer:</div>
+        <div id="answer-tiles" class="flex justify-center space-x-2 min-h-[3rem] bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-2">
+        </div>
+      </div>
+      
+      <div class="flex justify-center space-x-4">
+        <button onclick="clearAnswer()" 
+                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+          Clear
+        </button>
+        <button onclick="submitAnswer()" 
+                class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+          Submit Answer
+        </button>
+      </div>
+    </div>
+    
+  <% elsif game.finished? %>
+    <div class="text-3xl font-bold text-green-600 mb-4">🎉 Game Over!</div>
+    <% if game.winner %>
+      <p class="text-xl text-gray-900 mb-2">Winner: <strong><%= game.winner.nickname %></strong></p>
+      <p class="text-gray-600">Final Score: <%= game.winner.score %></p>
+    <% end %>
+    
+    <div class="mt-6">
+      <%= link_to "Play Again", new_game_path, 
+          class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition" %>
+    </div>
+  <% end %>
+</div>
