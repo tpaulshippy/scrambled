@@ -43,8 +43,11 @@ class PlayersController < ApplicationController
     answer = params[:answer]
 
     if answer.present?
-      @player.submit_answer!(answer)
-      head :ok
+      is_correct = @player.submit_answer!(answer)
+      render json: {
+        correct: is_correct,
+        message: is_correct ? "Correct!" : "Try again!"
+      }
     else
       render json: { error: "Answer cannot be blank" }, status: :unprocessable_entity
     end

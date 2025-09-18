@@ -36,7 +36,7 @@ RSpec.describe PlayersController, type: :controller do
       game.update!(state: 'playing', current_word: 'hello')
     end
 
-    context 'with valid answer' do
+    context 'with correct answer' do
       it 'submits the answer' do
         post :submit_answer, params: { 
           game_id: game.id, 
@@ -47,7 +47,7 @@ RSpec.describe PlayersController, type: :controller do
         expect(player.reload.current_answer).to eq('hello')
       end
 
-      it 'returns successful response' do
+      it 'returns successful response with correct feedback' do
         post :submit_answer, params: { 
           game_id: game.id, 
           id: player.id, 
@@ -55,6 +55,34 @@ RSpec.describe PlayersController, type: :controller do
         }
         
         expect(response).to have_http_status(:ok)
+        json_response = JSON.parse(response.body)
+        expect(json_response['correct']).to be true
+        expect(json_response['message']).to eq('Correct!')
+      end
+    end
+
+    context 'with incorrect answer' do
+      it 'submits the answer' do
+        post :submit_answer, params: { 
+          game_id: game.id, 
+          id: player.id, 
+          answer: 'wrong' 
+        }
+        
+        expect(player.reload.current_answer).to eq('wrong')
+      end
+
+      it 'returns successful response with incorrect feedback' do
+        post :submit_answer, params: { 
+          game_id: game.id, 
+          id: player.id, 
+          answer: 'wrong' 
+        }
+        
+        expect(response).to have_http_status(:ok)
+        json_response = JSON.parse(response.body)
+        expect(json_response['correct']).to be false
+        expect(json_response['message']).to eq('Try again!')
       end
     end
 

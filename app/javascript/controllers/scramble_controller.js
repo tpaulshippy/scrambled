@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["scrambledWord", "answerArea", "letterTile", "answerTiles"]
+  static targets = ["scrambledWord", "answerArea", "letterTile", "answerTiles", "feedback"]
   static values = { gameId: String, playerId: String }
   
   connect() {
@@ -137,16 +137,50 @@ export default class extends Controller {
     })
     .then(response => {
       if (response.ok) {
-        // Clear the answer after successful submission
-        this.clearAnswer()
+        return response.json()
       } else {
-        alert('Failed to submit answer. Please try again.')
+        throw new Error('Failed to submit answer')
+      }
+    })
+    .then(data => {
+      if (data.correct) {
+        // Clear the answer after correct submission
+        this.clearAnswer()
+        this.showFeedback(data.message, 'success')
+      } else {
+        // Show wrong answer feedback but don't clear the answer
+        this.showFeedback(data.message, 'error')
       }
     })
     .catch(error => {
       console.error('Error:', error)
-      alert('Failed to submit answer. Please try again.')
+      this.showFeedback('Failed to submit answer. Please try again.', 'error')
     })
+  }
+  
+  showFeedback(message, type) {
+    if (this.hasFeedbackTarget) {
+      this.feedbackTarget.textContent = message
+      
+      // Clear existing classes and set base classes
+      this.feedbackTarget.className = 'mt-2 p-2 rounded text-center'
+      
+      if (type === 'success') {
+        this.feedbackTarget.classList.add('bg-green-100', 'border', 'border-green-400', 'text-green-700')
+      } else {
+        this.feedbackTarget.classList.add('bg-red-100', 'border', 'border-red-400', 'text-red-700')
+      }
+      
+      // Show the feedback
+      this.feedbackTarget.style.display = 'block'
+      
+      // Auto-hide feedback after 3 seconds
+      setTimeout(() => {
+        if (this.hasFeedbackTarget) {
+          this.feedbackTarget.style.display = 'none'
+        }
+      }, 3000)
+    }
   }
   
   markReady() {

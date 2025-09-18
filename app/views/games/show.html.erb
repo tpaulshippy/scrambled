@@ -11,6 +11,12 @@
     <div class="text-4xl font-mono font-bold text-blue-600 mb-2"><%= @game.code %></div>
     <p class="text-gray-600">Share this code with your friends!</p>
   </div>
+
+    <% if @current_player %>
+      <div class="text-center mb-4">
+        <p class="text-lg text-gray-700">Welcome, <%= @current_player.nickname %>!</p>
+      </div>
+    <% end %>
     
     <%= render 'game_status', game: @game, current_player: @current_player %>
     

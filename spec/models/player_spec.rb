@@ -133,4 +133,64 @@ RSpec.describe Player, type: :model do
       end
     end
   end
+
+  describe '#submit_answer!' do
+    let(:player) { game.players.create!(nickname: 'TestPlayer') }
+
+    before do
+      game.update!(state: 'playing', current_word: 'hello')
+    end
+
+    context 'with correct answer' do
+      it 'returns true' do
+        result = player.submit_answer!('hello')
+        expect(result).to be true
+      end
+
+      it 'stores the answer' do
+        player.submit_answer!('hello')
+        expect(player.current_answer).to eq('hello')
+      end
+
+      it 'records the answered_at timestamp' do
+        expect { player.submit_answer!('hello') }.to change { player.answered_at }.from(nil)
+      end
+
+      it 'increments the score' do
+        expect { player.submit_answer!('hello') }.to change { player.score }.by(1)
+      end
+    end
+
+    context 'with incorrect answer' do
+      it 'returns false' do
+        result = player.submit_answer!('wrong')
+        expect(result).to be false
+      end
+
+      it 'stores the answer' do
+        player.submit_answer!('wrong')
+        expect(player.current_answer).to eq('wrong')
+      end
+
+      it 'records the answered_at timestamp' do
+        expect { player.submit_answer!('wrong') }.to change { player.answered_at }.from(nil)
+      end
+
+      it 'does not increment the score' do
+        expect { player.submit_answer!('wrong') }.not_to change { player.score }
+      end
+    end
+
+    it 'handles case insensitive answers' do
+      result = player.submit_answer!('HELLO')
+      expect(result).to be true
+      expect(player.current_answer).to eq('hello')
+    end
+
+    it 'strips whitespace from answers' do
+      result = player.submit_answer!('  hello  ')
+      expect(result).to be true
+      expect(player.current_answer).to eq('hello')
+    end
+  end
 end
