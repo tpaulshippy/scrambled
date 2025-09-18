@@ -15,6 +15,14 @@ class GamesController < ApplicationController
   end
 
   def show
+    if session[:player_id]
+      @current_player = Player.find_by(id: session[:player_id])
+      if @current_player&.game != @game
+        session[:player_id] = nil
+        @current_player = nil
+      end
+    end
+
     redirect_to root_path unless @game
   end
 

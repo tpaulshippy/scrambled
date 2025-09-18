@@ -1,4 +1,7 @@
 <%= turbo_stream_from "game_#{@game.id}" %>
+<% if @current_player %>
+  <%= turbo_stream_from "game_#{@game.id}_player_#{@current_player.id}" %>
+<% end %>
 
 <div class="max-w-4xl mx-auto" data-controller="scramble" 
      data-scramble-game-id-value="<%= @game.id %>" 
@@ -8,17 +11,11 @@
     <div class="text-4xl font-mono font-bold text-blue-600 mb-2"><%= @game.code %></div>
     <p class="text-gray-600">Share this code with your friends!</p>
   </div>
-
-  <div id="game_status">
-    <%= render 'game_status', game: @game %>
-  </div>
-
-  <div id="players_list" class="mt-8">
+    
+    <%= render 'game_status', game: @game, current_player: @current_player %>
+    
     <%= render 'players_list', game: @game %>
-  </div>
-
-  <% current_player = Player.find_by(id: session[:player_id]) if session[:player_id] %>
-  <% unless current_player&.game == @game %>
+  <% unless @current_player&.game == @game %>
     <div class="text-center mt-8">
       <%= link_to "Join Game", join_game_path(@game), 
           class: "bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition" %>

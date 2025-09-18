@@ -5,8 +5,14 @@ class Player < ApplicationRecord
   validates :nickname, uniqueness: { scope: :game_id }
   validates :score, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
+  after_save :broadcast_player_update
+
   scope :ready, -> { where(ready: true) }
   scope :by_score, -> { order(score: :desc) }
+
+  def broadcast_player_update
+    game.broadcast_game_update
+  end
 
   def mark_ready!
     if update(ready: true)

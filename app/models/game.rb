@@ -37,6 +37,7 @@ class Game < ApplicationRecord
   def start_countdown!
     update!(state: "countdown")
     broadcast_game_update
+    CountdownJob.perform_later(id, 3)
   end
 
   def start_playing!
@@ -68,7 +69,12 @@ class Game < ApplicationRecord
   def broadcast_game_update
     return if Rails.env.test?
 
-    broadcast_replace_to("game_#{id}", target: "game_status", partial: "games/game_status", locals: { game: self })
+    # Send personalized game status to each player on their individual channel
+    players.each do |player|
+      broadcast_replace_to("game_#{id}_player_#{player.id}", target: "game_status", partial: "games/game_status", locals: { game: self, current_player: player })
+    end
+    
+    # Players list is the same for everyone, broadcast to main game channel
     broadcast_replace_to("game_#{id}", target: "players_list", partial: "games/players_list", locals: { game: self })
   end
 

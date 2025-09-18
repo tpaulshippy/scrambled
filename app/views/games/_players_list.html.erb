@@ -1,47 +1,49 @@
-<div class="bg-white border border-gray-200 rounded-lg p-6">
-  <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">
-    Players (<%= game.players.count %>)
-  </h3>
-  
-  <% if game.players.any? %>
-    <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-      <% game.players.by_score.each do |player| %>
-        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-          <div class="flex items-center space-x-3">
-            <div class="flex-shrink-0">
-              <% if player.ready? %>
-                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-              <% else %>
-                <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
-              <% end %>
+<div id="players_list" class="mt-8">
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">
+      Players (<%= game.players.count %>)
+    </h3>
+    
+    <% if game.players.any? %>
+      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <% game.players.by_score.each do |player| %>
+          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
+              <div class="flex-shrink-0">
+                <% if player.ready? %>
+                  <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                <% else %>
+                  <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                <% end %>
+              </div>
+              
+              <div>
+                <div class="font-medium text-gray-900">
+                  <%= player.nickname %>
+                  <% if Player.find_by(id: session[:player_id]) == player %>
+                    <span class="text-xs text-blue-600">(You)</span>
+                  <% end %>
+                </div>
+                <div class="text-sm text-gray-500">
+                  <% if game.playing? || game.finished? %>
+                    Score: <%= player.score %>
+                  <% elsif player.ready? %>
+                    Ready ✓
+                  <% else %>
+                    Not ready
+                  <% end %>
+                </div>
+              </div>
             </div>
             
-            <div>
-              <div class="font-medium text-gray-900">
-                <%= player.nickname %>
-                <% if Player.find_by(id: session[:player_id]) == player %>
-                  <span class="text-xs text-blue-600">(You)</span>
-                <% end %>
-              </div>
-              <div class="text-sm text-gray-500">
-                <% if game.playing? || game.finished? %>
-                  Score: <%= player.score %>
-                <% elsif player.ready? %>
-                  Ready ✓
-                <% else %>
-                  Not ready
-                <% end %>
-              </div>
-            </div>
+            <% if game.playing? && player.current_answer.present? %>
+              <div class="text-xs text-green-600">Answered</div>
+            <% end %>
           </div>
-          
-          <% if game.playing? && player.current_answer.present? %>
-            <div class="text-xs text-green-600">Answered</div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p class="text-center text-gray-500">No players yet</p>
-  <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-center text-gray-500">No players yet</p>
+    <% end %>
+  </div>
 </div>
