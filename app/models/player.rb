@@ -48,10 +48,7 @@ class Player < ApplicationRecord
   def check_all_ready
     return unless game.all_players_ready?
 
-    if Rails.env.test?
-      game.start_countdown!
-    else
-      CountdownJob.set(wait: 1.second).perform_later(game.id)
-    end
+    game.start_countdown!
+    CountdownJob.set(wait: 1.second).perform_later(game.id) unless Rails.env.test?
   end
 end
