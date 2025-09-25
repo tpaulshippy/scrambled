@@ -10,7 +10,8 @@ servers:
     hosts:
       - <%= ENV['KAMAL_SERVER_IP'] %>
     options:
-      port: 3002
+      publish: 3002:3000
+    proxy: false
   # job:
   #   hosts:
   #     - 192.168.0.1
