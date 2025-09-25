@@ -6,58 +6,6 @@ export default class extends Controller {
   
   connect() {
     this.selectedLetters = []
-    this.setupTouchEvents()
-  }
-  
-  setupTouchEvents() {
-    this.element.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false })
-    this.element.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false })
-    this.element.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false })
-  }
-  
-  handleTouchStart(event) {
-    if (event.target.classList.contains('letter-tile')) {
-      event.preventDefault()
-      this.draggedElement = event.target
-      this.startX = event.touches[0].clientX
-      this.startY = event.touches[0].clientY
-    }
-  }
-  
-  handleTouchMove(event) {
-    if (this.draggedElement) {
-      event.preventDefault()
-      const touch = event.touches[0]
-      this.draggedElement.style.position = 'fixed'
-      this.draggedElement.style.left = touch.clientX - 24 + 'px'
-      this.draggedElement.style.top = touch.clientY - 24 + 'px'
-      this.draggedElement.style.zIndex = '1000'
-      this.draggedElement.style.transform = 'scale(1.1)'
-    }
-  }
-  
-  handleTouchEnd(event) {
-    if (this.draggedElement) {
-      event.preventDefault()
-      
-      const touch = event.changedTouches[0]
-      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY)
-      
-      // Reset styles
-      this.draggedElement.style.position = ''
-      this.draggedElement.style.left = ''
-      this.draggedElement.style.top = ''
-      this.draggedElement.style.zIndex = ''
-      this.draggedElement.style.transform = ''
-      
-      // Check if dropped on answer area
-      const answerArea = document.getElementById('answer-tiles')
-      if (answerArea && (elementBelow === answerArea || answerArea.contains(elementBelow))) {
-        this.addToAnswer(this.draggedElement)
-      }
-      
-      this.draggedElement = null
-    }
   }
   
   selectLetter(event) {
