@@ -9,13 +9,13 @@ servers:
   web:
     hosts:
       - <%= ENV['KAMAL_SERVER_IP'] %>
-    options:
-      publish: 3002:3000
-    proxy: false
   # job:
   #   hosts:
   #     - 192.168.0.1
   #   cmd: bin/jobs
+
+proxy:
+  app_port: 3000
 
 # Credentials for your image host.
 registry:
