@@ -22,6 +22,13 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Check Kamal config
+        run: bin/kamal config
+        env:
+          KAMAL_SERVER_IP: ${{ secrets.KAMAL_SERVER_IP }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+      
       - name: kamal deploy
         run: bin/kamal deploy
         env:
