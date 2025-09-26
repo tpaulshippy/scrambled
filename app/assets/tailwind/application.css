@@ -28,7 +28,6 @@ body {
   body {
     height: 100vh;
     height: 100dvh; /* Dynamic viewport height */
-    overflow: hidden;
   }
   
   /* Optimize button sizes for landscape touch interfaces */
