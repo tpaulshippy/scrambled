@@ -32,9 +32,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           eval $(ssh-agent -s)
           ssh-add ~/.ssh/id_rsa
-          ssh-keyscan xx.xx.xx.xx >> ~/.ssh/known_hosts
+          ssh-keyscan $KAMAL_SERVER_IP >> ~/.ssh/known_hosts
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          KAMAL_SERVER_IP: ${{ secrets.KAMAL_SERVER_IP }}
 
       - name: kamal deploy
         run: bin/kamal deploy
