@@ -10,7 +10,7 @@ RSpec.describe GamesController, type: :controller do
     it 'assigns active games' do
       active_game = Game.create!(max_score: 5, state: 'waiting')
       finished_game = Game.create!(max_score: 5, state: 'finished')
-      
+
       get :index
       expect(assigns(:games)).to include(active_game)
       expect(assigns(:games)).not_to include(finished_game)

@@ -17,7 +17,7 @@ RSpec.describe WordService do
     it 'returns a scrambled version of the word' do
       original = 'hello'
       scrambled = WordService.scramble(original)
-      
+
       expect(scrambled).not_to eq(original)
       expect(scrambled.chars.sort).to eq(original.chars.sort)
     end

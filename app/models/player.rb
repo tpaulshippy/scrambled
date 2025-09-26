@@ -32,7 +32,7 @@ class Player < ApplicationRecord
     if is_correct
       Rails.logger.info "Player #{id} submitted correct answer: #{answer}"
       increment_score!
-  
+
       game.next_round!
     else
       Rails.logger.info "Player #{id} submitted incorrect answer: #{answer}"

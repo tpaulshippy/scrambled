@@ -42,14 +42,14 @@ RSpec.describe Game, type: :model do
       game = Game.create!(max_score: 5)
       player1 = game.players.create!(nickname: 'Player1')
       player2 = game.players.create!(nickname: 'Player2')
-      
+
       expect(game.players).to include(player1, player2)
     end
 
     it 'destroys players when game is destroyed' do
       game = Game.create!(max_score: 5)
       player = game.players.create!(nickname: 'Player1')
-      
+
       expect { game.destroy }.to change { Player.count }.by(-1)
     end
   end
@@ -118,7 +118,7 @@ RSpec.describe Game, type: :model do
     it 'returns the player with highest score' do
       player1 = game.players.create!(nickname: 'Player1', score: 3)
       player2 = game.players.create!(nickname: 'Player2', score: 5)
-      
+
       expect(game.winner).to eq(player2)
     end
   end

@@ -129,7 +129,7 @@ RSpec.describe Player, type: :model do
 
     describe '.by_score' do
       it 'returns players ordered by score descending' do
-        expect(Player.by_score).to eq([@high_score_player, @ready_player, @not_ready_player])
+        expect(Player.by_score).to eq([ @high_score_player, @ready_player, @not_ready_player ])
       end
     end
   end
