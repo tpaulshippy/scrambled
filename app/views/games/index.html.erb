@@ -14,26 +14,4 @@
     <% end %>
   </div>
   
-  <% if @games.present? %>
-    <div class="mt-12">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">Active Games</h2>
-      <div class="grid gap-4 max-w-2xl mx-auto">
-        <% @games.each do |game| %>
-          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-2xl font-mono font-bold text-blue-600"><%= game.code %></div>
-                <div class="text-sm text-gray-500">
-                  <%= pluralize(game.players.count, 'player') %> • 
-                  <%= game.state.titleize %>
-                </div>
-              </div>
-              <%= link_to "Join", join_game_path(game), 
-                  class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
 </div>
