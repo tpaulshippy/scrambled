@@ -1,5 +1,5 @@
 <div id="game_status" class="h-full">
-  <div class="bg-white border border-gray-200 rounded-xl p-3 sm:p-2 md:p-6 text-center h-full flex flex-col">
+  <div class="bg-white border border-gray-200 rounded-xl p-3 sm:p-2 md:p-2 text-center h-full flex flex-col">
     <% if game.waiting? %>
       <div class="flex flex-col items-center justify-center h-full min-h-0">
         <div class="text-lg sm:text-xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Waiting for Players</div>
@@ -27,8 +27,7 @@
       <div class="h-full p-1 space-y-2">
         <!-- Header -->
         <div class="text-center">
-          <div class="text-xs text-gray-500">Round <%= game.round_number %></div>
-          <div class="text-sm text-gray-700">Unscramble this word:</div>
+          <span class="text-xs text-gray-500">Round <%= game.round_number %> - Unscramble this word:</span>
         </div>
         
         <!-- Letter tiles -->

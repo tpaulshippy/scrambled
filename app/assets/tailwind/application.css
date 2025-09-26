@@ -1,10 +1,33 @@
 @import "tailwindcss";
 
+/* Full screen mobile optimizations */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Support for mobile browsers with dynamic viewport units */
+body {
+  height: 100vh; /* Fallback */
+  height: 100dvh; /* Dynamic viewport height - accounts for mobile browser UI */
+}
+
+/* Support for safe areas (notches, rounded corners) */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* Landscape-specific optimizations */
 @media screen and (orientation: landscape) {
   /* Full height usage and no scrolling for all pages */
   body {
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
     overflow: hidden;
   }
   
@@ -40,6 +63,28 @@
   }
 }
 
+/* Mobile-specific full screen optimizations */
+@media screen and (max-width: 640px) {
+  /* Remove padding for true edge-to-edge on mobile */
+  main {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Ensure content uses full available height */
+  #game_status {
+    height: calc(100dvh - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+  
+  #players_list {
+    height: calc(100dvh - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+}
+
 /* Enhanced touch targets for mobile landscape */
 @media screen and (orientation: landscape) and (max-width: 1023px) {
   .letter-tile {
@@ -51,5 +96,24 @@
   button {
     min-height: 3rem;
     font-size: 1.125rem;
+  }
+}
+
+/* PWA fullscreen support */
+@media (display-mode: fullscreen) {
+  body {
+    padding-top: 0;
+  }
+}
+
+/* Hide scrollbars on mobile for cleaner look */
+@media screen and (max-width: 1023px) {
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
   }
 }
