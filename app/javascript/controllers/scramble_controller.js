@@ -18,7 +18,7 @@ export default class extends Controller {
     
     // Create a new tile for the answer area
     const answerTile = document.createElement('div')
-    answerTile.className = 'letter-tile bg-green-100 border-2 border-green-300 w-16 h-16 lg:w-20 lg:h-20 flex items-center justify-center text-2xl lg:text-3xl font-bold text-green-900 rounded-xl cursor-pointer hover:bg-green-200 transition-all duration-200 shadow-md hover:shadow-lg'
+    answerTile.className = 'letter-tile bg-green-100 border-2 border-green-300 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-sm sm:text-lg font-bold text-green-900 rounded-lg cursor-pointer hover:bg-green-200 transition-all duration-200 shadow-sm hover:shadow-md'
     answerTile.textContent = letter.toUpperCase()
     answerTile.dataset.letter = letter
     answerTile.dataset.action = 'click->scramble#removeFromAnswer'
