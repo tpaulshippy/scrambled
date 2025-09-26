@@ -26,6 +26,7 @@ class Player < ApplicationRecord
   def submit_answer!(answer)
     self.current_answer = answer.strip.downcase
     self.answered_at = Time.current
+    save!
 
     is_correct = correct_answer?
     if is_correct

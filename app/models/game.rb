@@ -26,7 +26,7 @@ class Game < ApplicationRecord
   end
 
   def all_players_ready?
-    players.count >= 2 && players.all?(&:ready?)
+    players.count >= 1 && players.all?(&:ready?)
   end
 
   def winner

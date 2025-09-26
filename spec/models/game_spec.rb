@@ -84,8 +84,13 @@ RSpec.describe Game, type: :model do
       expect(game.all_players_ready?).to be false
     end
 
-    it 'returns false with only one player' do
+    it 'returns true with one ready player' do
       game.players.create!(nickname: 'Player1', ready: true)
+      expect(game.all_players_ready?).to be true
+    end
+
+    it 'returns false with one unready player' do
+      game.players.create!(nickname: 'Player1', ready: false)
       expect(game.all_players_ready?).to be false
     end
 
