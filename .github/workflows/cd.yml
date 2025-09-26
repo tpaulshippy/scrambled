@@ -1,7 +1,6 @@
 name: CD
 
 on:
-  push:
   workflow_run:
     workflows: ["CI"]
     types:
@@ -39,13 +38,14 @@ jobs:
           fi
           echo "✅ All required secrets are set"
         env:
+          RAILS_ENV: production
           KAMAL_SERVER_IP: ${{ secrets.KAMAL_SERVER_IP }}
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
-      
       - name: kamal deploy
         run: bin/kamal deploy
         env:
+          RAILS_ENV: production
           KAMAL_SERVER_IP: ${{ secrets.KAMAL_SERVER_IP }}
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
