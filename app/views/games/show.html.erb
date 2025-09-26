@@ -12,12 +12,11 @@
   <div class="bg-white rounded-xl shadow-lg p-3 mb-3 flex-shrink-0">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <div class="text-center sm:text-left mb-2 sm:mb-0">
-        <h1 class="text-lg sm:text-xl font-bold text-gray-900">Word Scramble</h1>
+        <h1 class="text-lg sm:text-xl font-bold text-gray-900">Scrambled State of Mind</h1>
         <div class="text-2xl sm:text-3xl font-mono font-bold text-blue-600"><%= @game.code %></div>
       </div>
       
       <div class="text-center sm:text-right">
-        <p class="text-xs sm:text-sm text-gray-600 mb-1">Share this code!</p>
         <% if @current_player %>
           <p class="text-sm sm:text-base font-medium text-gray-700">Welcome, <%= @current_player.nickname %>!</p>
         <% end %>
