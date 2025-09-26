@@ -2,9 +2,30 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Scrambled" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,orientation=landscape">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="screen-orientation" content="landscape">
+    <style>
+      @media screen and (orientation: portrait) {
+        body::before {
+          content: "🔄 Please rotate your device to landscape mode for the best experience";
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          background: #1f2937;
+          color: white;
+          padding: 8px;
+          text-align: center;
+          z-index: 9999;
+          font-size: 14px;
+        }
+        body {
+          padding-top: 40px;
+        }
+      }
+    </style>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -22,8 +43,8 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen bg-gray-50 <%= content_for(:body_class) %>">
+    <main class="container mx-auto px-4 py-4 sm:py-6 md:py-8 h-screen flex items-center justify-center">
       <%= yield %>
     </main>
   </body>

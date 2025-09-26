@@ -1,1 +1,55 @@
 @import "tailwindcss";
+
+/* Landscape-specific optimizations */
+@media screen and (orientation: landscape) {
+  /* Full height usage and no scrolling for all pages */
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Optimize button sizes for landscape touch interfaces */
+  .letter-tile {
+    min-width: 4rem;
+    min-height: 4rem;
+  }
+  
+  /* Better spacing for landscape game layout */
+  @media (min-width: 1024px) {
+    .letter-tile {
+      min-width: 5rem;
+      min-height: 5rem;
+    }
+  }
+  
+  /* Ensure game elements use available horizontal space */
+  #game_status {
+    max-height: calc(100vh - 200px);
+  }
+  
+  #players_list {
+    max-height: calc(100vh - 200px);
+  }
+}
+
+/* Portrait mode warning styles (handled in layout) */
+@media screen and (orientation: portrait) {
+  /* Slightly fade the content when in portrait mode */
+  main {
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced touch targets for mobile landscape */
+@media screen and (orientation: landscape) and (max-width: 1023px) {
+  .letter-tile {
+    min-width: 3.5rem;
+    min-height: 3.5rem;
+    font-size: 1.5rem;
+  }
+  
+  button {
+    min-height: 3rem;
+    font-size: 1.125rem;
+  }
+}

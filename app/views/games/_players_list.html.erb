@@ -1,27 +1,27 @@
-<div id="players_list" class="mt-8">
-  <div class="bg-white border border-gray-200 rounded-lg p-6">
-    <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">
+<div id="players_list">
+  <div class="bg-white border border-gray-200 rounded-2xl p-4 h-full">
+    <h3 class="text-lg lg:text-xl font-bold text-gray-900 mb-4 text-center">
       Players (<%= game.players.count %>)
     </h3>
     
     <% if game.players.any? %>
-      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div class="space-y-3 max-h-[500px] overflow-y-auto">
         <% game.players.by_score.each do |player| %>
-          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
             <div class="flex items-center space-x-3">
               <div class="flex-shrink-0">
                 <% if player.ready? %>
-                  <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div class="w-4 h-4 bg-green-500 rounded-full"></div>
                 <% else %>
-                  <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                  <div class="w-4 h-4 bg-gray-300 rounded-full"></div>
                 <% end %>
               </div>
               
-              <div>
-                <div class="font-medium text-gray-900">
+              <div class="min-w-0 flex-1">
+                <div class="font-medium text-gray-900 truncate">
                   <%= player.nickname %>
                   <% if Player.find_by(id: session[:player_id]) == player %>
-                    <span class="text-xs text-blue-600">(You)</span>
+                    <span class="text-xs text-blue-600 font-bold">(You)</span>
                   <% end %>
                 </div>
                 <div class="text-sm text-gray-500">
@@ -37,13 +37,15 @@
             </div>
             
             <% if game.playing? && player.current_answer.present? %>
-              <div class="text-xs text-green-600">Answered</div>
+              <div class="text-sm text-green-600 font-medium">✓</div>
             <% end %>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p class="text-center text-gray-500">No players yet</p>
+      <div class="flex items-center justify-center h-32">
+        <p class="text-center text-gray-500">No players yet</p>
+      </div>
     <% end %>
   </div>
 </div>

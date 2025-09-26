@@ -1,17 +1,32 @@
-<div class="text-center">
-  <h1 class="text-4xl font-bold text-gray-900 mb-8">Word Scramble</h1>
-  <p class="text-lg text-gray-600 mb-8">Multiplayer word game for 4-12+ players</p>
-  
-  <div class="max-w-md mx-auto space-y-4">
-    <%= link_to "Create New Game", new_game_path, class: "block w-full bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-blue-700 transition" %>
-    
-    <div class="text-gray-500">or</div>
-    
-    <%= form_with url: games_path, method: :get, local: true, class: "space-y-4" do |f| %>
-      <%= f.text_field :code, placeholder: "Enter 4-digit game code", maxlength: 4, 
-          class: "w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-2xl font-mono tracking-widest focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
-      <%= f.submit "Join Game", class: "w-full bg-green-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-green-700 transition" %>
-    <% end %>
+<div class="w-full max-w-6xl mx-auto h-full flex flex-col">
+  <!-- Compact title section -->
+  <div class="text-center mb-4 sm:mb-6 flex-shrink-0">
+    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Word Scramble</h1>
+    <p class="text-sm sm:text-base md:text-lg text-gray-600 mb-1">Multiplayer word game for 4-12+ players</p>
+    <p class="text-xs sm:text-sm md:text-base text-gray-500">Challenge your friends in real-time!</p>
   </div>
   
+  <!-- Two columns: Create New Game | Join Game -->
+  <div class="grid sm:grid-cols-2 gap-4 sm:gap-6 items-stretch flex-1">
+    <!-- Left side: Create New Game -->
+    <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center justify-center text-center">
+      <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Start a New Game</h2>
+      <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Create a game and invite your friends</p>
+      <%= link_to "Create New Game", new_game_path, class: "w-full bg-blue-600 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-base sm:text-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg" %>
+    </div>
+    
+    <!-- Right side: Join Game -->
+    <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col">
+      <div class="text-center mb-3 sm:mb-4 flex-shrink-0">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Join a Game</h2>
+        <p class="text-xs sm:text-sm text-gray-600">Enter the 4-digit code</p>
+      </div>
+      
+      <%= form_with url: games_path, method: :get, local: true, class: "space-y-3 sm:space-y-4 flex-1 flex flex-col justify-center" do |f| %>
+        <%= f.text_field :code, placeholder: "Enter 4-digit code", maxlength: 4, 
+            class: "w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl text-center text-xl sm:text-2xl font-mono tracking-widest focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200" %>
+        <%= f.submit "Join Game", class: "w-full bg-green-600 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-base sm:text-lg font-semibold hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg" %>
+      <% end %>
+    </div>
+  </div>
 </div>
